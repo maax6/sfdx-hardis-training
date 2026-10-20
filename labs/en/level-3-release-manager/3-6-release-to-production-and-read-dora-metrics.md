@@ -24,7 +24,7 @@ depends_on:
 
 **Level**: 3 Release Manager
 
-**Time**: ~1 h 10<!-- observed --> (observed: median 1 h 14, 4 learners, fastest 21 min)<!-- /observed -->
+**Time**: ~1 h 10<!-- observed --> (observed: median 1 h 14, 6 learners, fastest 41 min)<!-- /observed -->
 
 **You will**: release to production, and then measure whether your pipeline is any good.
 
@@ -149,10 +149,13 @@ You have shipped. The question a release manager gets asked next is "how are we 
 deserves a better answer than a feeling.
 
 Open the **DevOps Pipeline** panel, click the gear **(1)** at the top right, and choose
-**DORA metrics** **(2)**. The menu holds three entries and you used the other two in [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md):
-**Pipeline Settings** and **Add/Configure Org**.
+**Generate DORA Metrics** **(2)**. You used **Configure Pipeline Settings** and **Add or Reconnect a Major Org** of the same
+menu in [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md). **Configure Org Initialization** and **Configure
+Replacement Rules** are two settings this course does not use:
+[Lab 3.1](3-1-configure-the-pipeline-up-to-production.md#three-settings-this-course-does-not-use) says what
+they are for.
 
-![The gear menu of the DevOps Pipeline panel, open on DORA metrics](../../_assets/annotated/vscode/pipeline-settings-menu-level3--dora.png)
+![The gear menu of the DevOps Pipeline panel, open on Generate DORA Metrics](../../_assets/annotated/vscode/pipeline-settings-menu-level3--dora.png)
 
 A **DORA metrics** tab opens and says, for a few seconds, that it is reading deployment jobs and
 Pull Requests from GitHub. That sentence is the whole design. Nothing is asked of any org, so there
@@ -386,6 +389,27 @@ Command documentation: [hardis:doc:dora-report](https://sfdx-hardis.cloudity.com
 - A DORA report in `docs/dora/`
 
 ## If it goes wrong
+
+**The Pull Request from `uat` into `preprod` has a conflict in `config/.sfdx-hardis.yml`.**
+Two things together cause it. Your `preprod` came from a `main` newer than the course your
+`integration` started from (**Sync fork** on GitHub moves `main`), and a course update reached
+`integration` as a **Squash and merge** instead of the merge commit **Update my course** makes. Git
+then cannot see that both branches carry the same course changes, and it stops where your pipeline
+settings sit next to a line the course changed. Nothing is lost: `uat` holds the right file. Bring
+`preprod` into `uat` through a branch of its own, from the **Command Palette** of VS Code:
+
+1. **Git: Fetch**
+2. **Git: Create Branch From...**, pick **origin/uat**, and name it `fix/merge-preprod-into-uat`
+3. **Git: Merge...**, and pick **origin/preprod**, under **remote branches**
+4. Open `config/.sfdx-hardis.yml` under **Merge Changes**, click **Accept Current Change** above each
+   conflict, save, click **+** on its row, then **Commit**. Current is `uat`, which already has the
+   course changes and your settings
+5. **Publish Branch**, then on GitHub open its Pull Request into `uat`, wait for the checks, and
+   merge it with a merge commit (**Create a merge commit**, under the arrow of the green button),
+   never a squash: a squash brings the conflict back
+
+The Pull Request into `preprod` then has no conflict. Its check runs again and stops on the
+deliverability step, as step 2 says.
 
 **The deployment to production fails on a component that worked in preprod.**
 Production has drifted, or has something preprod does not: an extra validation rule, a record type,

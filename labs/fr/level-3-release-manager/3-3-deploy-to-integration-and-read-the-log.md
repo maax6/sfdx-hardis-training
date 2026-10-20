@@ -5,7 +5,7 @@ description: "Lisez un log de déploiement sfdx-hardis, trouvez ce qu'un joker .
 level: 3
 lab: 3
 lang: fr
-source_rev: "2af09f8237c61e5ea4ae2151f2d0f2045d7b1f82"
+source_rev: "2fafd9feae43cc1724c5a45d6f182e82ae51595e"
 screenshots:
   - annotated/vscode/pipeline-config-deployment--delta
   - annotated/vscode/orgs-manager
@@ -28,7 +28,7 @@ depends_on:
 
 **Niveau** : 3 Release Manager
 
-**Durée** : ~1 h 30<!-- observed --> (observé : médiane 1 h 30, 5 participants, le plus rapide 51 min)<!-- /observed -->
+**Durée** : ~1 h 25<!-- observed --> (observé : médiane 1 h 26, 6 participants, le plus rapide 30 min)<!-- /observed -->
 
 **Vous allez** : lire correctement un log de déploiement, relire une Pull Request dont le contrôle
 échoue sur un champ qui est pourtant dans son diff et trouver le fichier qui le cache, puis
@@ -107,7 +107,7 @@ l'org doit vraiment être au commit où la pipeline la croit.
 !!! note "Ce projet a le delta désactivé, exprès"
     `useDeltaDeployment` est absent de `config/.sfdx-hardis.yml` : chaque déploiement de ce cours
     envoie donc le package complet. Lisez-le vous-même : **DevOps Pipeline**, menu engrenage,
-    **Pipeline Settings**, portée **Global Settings** **(1)**, onglet **Deployment** **(2)**.
+    **Configure Pipeline Settings**, portée **Global Settings** **(1)**, onglet **Deployment** **(2)**.
     **Use Delta Deployment** **(3)** affiche **Disabled**.
 
     L'application Helios fait maintenant une soixantaine de composants : un déploiement complet coûte une
@@ -342,6 +342,12 @@ La définition de l'action est lue dans la branche que vous avez récupérée, e
 l'étape 10 vous a fait récupérer `integration` et faire un pull. Si vous avez changé de branche
 depuis, revenez-y.
 
+!!! warning "Pas de Retry sur la ligne, seulement Mark as done ?"
+    VS Code n'est pas sur `integration`, donc la définition de l'action n'est pas dans votre
+    copie de travail. Récupérez `integration`, faites un pull, et cliquez sur **Refresh**. Ne relancez pas le
+    job sur GitHub à la place : il redéploie tout, sans le Quick Deploy, et rejoue les actions
+    depuis le début.
+
 De retour dans l'onglet **Deployment Actions**, cliquez sur **Retry** sur la ligne de **Put the
 delivery managers in the Crew Leads group**. La commande tourne dans VS Code, sur
 `helios-integration` :
@@ -524,6 +530,11 @@ jour depuis le panneau **Dependencies**, et vérifiez que l'icône du fournisseu
 Pipeline est connectée. Une ligne ne propose Retry que si son action a échoué ou a été arrêtée,
 après le déploiement.
 
+**La ligne en échec n'a pas de Retry, seulement Mark as done.**
+La branche que vous avez récupérée n'est pas `integration`. Récupérez-la, faites un pull, cliquez
+sur **Refresh**. Relancer le job de déploiement sur GitHub n'est pas la même chose : il redéploie
+tout, sans le Quick Deploy, et la première action échoue tant que le groupe n'existe pas.
+
 **Retry dit qu'aucune org de helios-integration n'est connectée.**
 Connectez `helios-integration` dans **Orgs Manager**, puis cliquez à nouveau sur **Retry**.
 
@@ -549,4 +560,4 @@ Welcome page > **Training: Level 3** > **Check my work**, puis choisissez le **L
 - [Les rouages de Smart Deploy](https://sfdx-hardis.cloudity.com/salesforce-devops-smart-deployment/)
 - [Rattraper une action de déploiement en échec](https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions/#recover-a-failed-action)
 
-[Suite : Lab 3.4 - Trois Pull Requests se percutent : choisir l'ordre de merge](3-4-merge-colliding-pull-requests.md){ .md-button .md-button--primary }
+[Suite : Lab 3.4 - Trois Pull Requests pour une release : revoir l'ordre de merge](3-4-merge-colliding-pull-requests.md){ .md-button .md-button--primary }

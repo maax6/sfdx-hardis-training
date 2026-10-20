@@ -5,7 +5,7 @@ description: "Livrez via preprod vers votre org de production, vérifiez-la, pui
 level: 3
 lab: 6
 lang: fr
-source_rev: "bcaeecc0f384f6759823c897136e47a919dd4ac9"
+source_rev: "c8432c10ae1b16d97f52b3c2795aaf0b07c7c4a8"
 screenshots:
   - annotated/vscode/orgs-manager
   - annotated/vscode/pipeline-settings-menu-level3--dora
@@ -24,7 +24,7 @@ depends_on:
 
 **Niveau** : 3 Release Manager
 
-**Durée** : ~1 h 10<!-- observed --> (observé : médiane 1 h 14, 4 participants, le plus rapide 21 min)<!-- /observed -->
+**Durée** : ~1 h 10<!-- observed --> (observé : médiane 1 h 14, 6 participants, le plus rapide 41 min)<!-- /observed -->
 
 **Vous allez** : livrer en production, puis mesurer si votre pipeline vaut quelque chose.
 
@@ -154,10 +154,14 @@ Vous avez livré. La question qu'on pose ensuite à un release manager est "où 
 mérite mieux qu'une impression.
 
 Ouvrez le panneau **DevOps Pipeline**, cliquez sur l'engrenage **(1)** en haut à droite, et
-choisissez **DORA metrics** **(2)**. Le menu contient trois entrées et vous avez utilisé les deux
-autres au [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md) : **Pipeline Settings** et **Add/Configure Org**.
+choisissez **Generate DORA Metrics** **(2)**. Vous avez utilisé **Configure Pipeline Settings** et **Add or Reconnect a
+Major Org** du même menu au [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md).
+**Configure Org Initialization** et **Configure Replacement Rules** sont deux réglages que ce cours
+laisse de côté : le
+[Lab 3.1](3-1-configure-the-pipeline-up-to-production.md#trois-reglages-que-ce-cours-laisse-de-cote) dit à
+quoi ils servent.
 
-![Le menu engrenage du panneau DevOps Pipeline, ouvert sur DORA metrics](../../_assets/annotated/vscode/pipeline-settings-menu-level3--dora.png)
+![Le menu engrenage du panneau DevOps Pipeline, ouvert sur Generate DORA Metrics](../../_assets/annotated/vscode/pipeline-settings-menu-level3--dora.png)
 
 Un onglet **DORA metrics** s'ouvre et dit, pendant quelques secondes, qu'il lit les jobs de
 déploiement et les Pull Requests depuis GitHub. Cette phrase est toute la conception. Rien n'est
@@ -412,6 +416,28 @@ Documentation de la commande : [hardis:doc:dora-report](https://sfdx-hardis.clou
 - Un rapport DORA dans `docs/dora/`
 
 ## En cas de problème
+
+**La Pull Request de `uat` vers `preprod` a un conflit dans `config/.sfdx-hardis.yml`.**
+Deux choses ensemble le provoquent. Votre `preprod` est partie d'un `main` plus récent que le cours
+dont votre `integration` est partie (**Sync fork** sur GitHub fait avancer `main`), et une mise à
+jour du cours est arrivée dans `integration` par un **Squash and merge** au lieu du merge commit que
+fait **Update my course**. Git ne voit alors pas que les deux branches portent les mêmes changements
+du cours, et il s'arrête là où vos réglages de pipeline touchent une ligne que le cours a modifiée.
+Rien n'est perdu : `uat` contient le bon fichier. Amenez `preprod` dans `uat` par une branche à part,
+depuis la **Command Palette** de VS Code :
+
+1. **Git: Fetch**
+2. **Git: Create Branch From...**, choisissez **origin/uat**, et nommez-la `fix/merge-preprod-into-uat`
+3. **Git: Merge...**, et choisissez **origin/preprod**, sous **remote branches**
+4. Ouvrez `config/.sfdx-hardis.yml` sous **Merge Changes**, cliquez **Accept Current Change**
+   au-dessus de chaque conflit, enregistrez, cliquez **+** sur sa ligne, puis **Commit**. Current
+   est `uat`, qui a déjà les changements du cours et vos réglages
+5. **Publish Branch**, puis sur GitHub ouvrez sa Pull Request vers `uat`, attendez les contrôles, et
+   mergez-la avec un merge commit (**Create a merge commit**, sous la flèche du bouton vert),
+   jamais en squash : un squash fait revenir le conflit
+
+La Pull Request vers `preprod` n'a alors plus de conflit. Son contrôle repart et s'arrête sur
+l'étape de délivrabilité, comme le dit l'étape 2.
 
 **Le déploiement en production échoue sur un composant qui marchait en preprod.**
 La production a dérivé, ou elle a quelque chose que preprod n'a pas : une règle de validation en
