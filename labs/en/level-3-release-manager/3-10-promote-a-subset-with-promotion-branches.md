@@ -29,7 +29,7 @@ depends_on:
 
 **Level**: 3 Release Manager
 
-**Time**: ~50 min<!-- observed --> (Labs 3.8 to 3.10 observed together: median 1 h 46, 3 learners, fastest 51 min)<!-- /observed -->
+**Time**: ~1 h 05<!-- observed --> (observed: median 1 h 07, 6 learners, fastest 39 min)<!-- /observed -->
 
 **You will**: ship three approved User Stories to preprod while two others stay behind in UAT, solve
 the conflict that one of them drags along, and put the pipeline back afterwards, using the one
@@ -90,7 +90,7 @@ included.
 The two settings this lab needs were published in [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md) and have been travelling up the
 pipeline with every promotion since. Look at them before you rely on them.
 
-Open the **DevOps Pipeline** panel, the gear menu, **Pipeline Settings**, scope **Global Settings**,
+Open the **DevOps Pipeline** panel, the gear menu, **Configure Pipeline Settings**, scope **Global Settings**,
 and the **Danger Zone** tab.
 
 ![The Danger Zone of the Global Pipeline Settings, with the two promotion branch settings](../../_assets/annotated/vscode/pipeline-config-danger--promotion-branches.png)
@@ -155,8 +155,8 @@ reads from top to bottom.
 Review each one with the four questions of [Lab 3.2](3-2-review-a-contributor-pull-request.md) and merge it with **Squash and merge**, as every
 feature Pull Request of this course. You do not have to wait for each deployment before merging the
 next one: they queue on `integration`. When the last one is green, promote `integration` into `uat`
-the way [Lab 3.5](3-5-promote-to-uat-and-write-release-notes.md) did: the **+ PR** chip on the arrow, a title a human can read, **Merge pull request**
-and never a squash.
+the way [Lab 3.5](3-5-promote-to-uat-and-write-release-notes.md) did: the **+ PR** chip on the arrow, a title a human can read, a merge commit
+(**Create a merge commit**, under the arrow of the green button) and never a squash.
 
 The five stories are now in `uat`, deployed to `helios-uat`, and this is the moment a real week
 reaches: everything is testable, and only part of it is approved.
@@ -553,7 +553,8 @@ reading this in six months can use:
 > until the wording is approved, expected Wednesday next week, and US-060 until the crews have
 > been briefed.
 
-Then merge with **Merge pull request**. Never a squash: the cherry-picked commits and their trailers
+Then merge with a merge commit: **Create a merge commit**, under the arrow of the green button.
+Never a squash: the cherry-picked commits and their trailers
 are what the next promotion, the retrofit and the release notes all read. The **How to merge** line
 of the green check comment says it too.
 
@@ -623,7 +624,7 @@ the blue button under it reads **Continue** while a merge is in progress, as in
 [Lab 2.7](../level-2-contributor-advanced/2-7-resolve-a-git-merge-conflict.md). Click it, then **Save / Publish User Story** as in [Lab 3.7](3-7-hotfix-and-retrofit.md)
 step 9, and open the Pull Request into `integration`, titled `Retrofit: the promotion of US-057,
 US-059 and US-061 back down into integration`. Its **Files changed** tab is empty, and that is
-right: read the block below. Wait for its check, and merge it with **Merge pull request**, as the
+right: read the block below. Wait for its check, and merge it with a merge commit (**Create a merge commit**), as the
 **How to merge** line of its comment asks.
 
 <details markdown="1"><summary>Under the hood: a Pull Request that changes no file, and why it still matters</summary>
