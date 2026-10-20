@@ -664,23 +664,33 @@
         "instanceUrl",
         "orgAuthenticationMode",
         "enablePromotionBranches",
-        "allowedPromotionSteps"
+        "allowedPromotionSteps",
+        "poolConfig",
+        "orgInitSteps",
+        "replacementRules"
       ],
       "docs": [
         "salesforce-devops-setup-home",
         "salesforce-devops-setup-auth",
         "salesforce-devops-setup-auth-github",
-        "salesforce-devops-setup-existing-org"
+        "salesforce-devops-setup-existing-org",
+        "salesforce-devops-setup-scratch-org-pool",
+        "salesforce-devops-org-initialization",
+        "salesforce-devops-config-replacement-rules"
       ],
       "panels": [
         "pipeline",
         "pipelineConfig",
         "orgManager",
         "commandExecution",
-        "promptInput"
+        "promptInput",
+        "scratchOrgPool",
+        "orgInit",
+        "replacementRules"
       ],
       "screenshots": [
         "annotated/vscode/devops-pipeline--one-column",
+        "annotated/vscode/devops-pipeline-level3-split",
         "annotated/web/github-new-branch",
         "annotated/web/github-branch-rules",
         "annotated/web/github-branch-rule",
@@ -697,7 +707,10 @@
         "annotated/vscode/pipeline-config-branch-merge-target",
         "annotated/vscode/pipeline-cards--save-publish",
         "annotated/vscode/work-save-completed",
-        "annotated/vscode/devops-pipeline-level3--four-stages"
+        "annotated/vscode/devops-pipeline-level3--four-stages",
+        "annotated/vscode/scratch-org-pool",
+        "annotated/vscode/org-initialization",
+        "annotated/vscode/replacement-rules"
       ],
       "translations": {
         "fr": {
@@ -796,7 +809,7 @@
       "id": "lab-3-4",
       "level": 3,
       "lab": 4,
-      "title": "Three Pull Requests collide: choose the merge order",
+      "title": "Three Pull Requests in one release: review the merge order",
       "file": "labs/en/level-3-release-manager/3-4-merge-colliding-pull-requests.md",
       "url": "https://sfdx-hardis-training.cloudity.com/en/level-3-release-manager/3-4-merge-colliding-pull-requests/",
       "commands": [
@@ -1218,6 +1231,15 @@
       "salesforce-devops-setup-existing-org": [
         "lab-3-1"
       ],
+      "salesforce-devops-setup-scratch-org-pool": [
+        "lab-3-1"
+      ],
+      "salesforce-devops-org-initialization": [
+        "lab-3-1"
+      ],
+      "salesforce-devops-config-replacement-rules": [
+        "lab-3-1"
+      ],
       "salesforce-devops-validate-merge-request": [
         "lab-3-2"
       ],
@@ -1357,6 +1379,15 @@
         "lab-3-1",
         "lab-3-4",
         "lab-3-10"
+      ],
+      "scratchOrgPool": [
+        "lab-3-1"
+      ],
+      "orgInit": [
+        "lab-3-1"
+      ],
+      "replacementRules": [
+        "lab-3-1"
       ],
       "doraMetrics": [
         "lab-3-6",
@@ -1585,6 +1616,15 @@
       "allowedPromotionSteps": [
         "lab-3-1",
         "lab-3-10"
+      ],
+      "poolConfig": [
+        "lab-3-1"
+      ],
+      "orgInitSteps": [
+        "lab-3-1"
+      ],
+      "replacementRules": [
+        "lab-3-1"
       ],
       "useDeltaDeployment": [
         "lab-3-3",

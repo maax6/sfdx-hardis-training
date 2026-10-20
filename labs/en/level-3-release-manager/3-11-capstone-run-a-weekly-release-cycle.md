@@ -21,7 +21,7 @@ depends_on:
 
 **Level**: 3 Release Manager
 
-**Time**: ~20 min<!-- observed --> (observed: median 20 min, 3 learners, fastest 9 min)<!-- /observed -->
+**Time**: ~55 min<!-- observed --> (observed: median 59 min, 6 learners, fastest 20 min)<!-- /observed -->
 
 **You will**: do a whole week in one sitting, with no step-by-step, and end with something you could
 show somebody.
@@ -99,7 +99,7 @@ this release is for, and put them in the description of the Pull Request from `p
 
 ### Friday: measure
 
-Open the **DORA metrics** panel from the gear menu of the **DevOps Pipeline**, as in [Lab 3.6](3-6-release-to-production-and-read-dora-metrics.md), and
+Open the **DORA metrics** panel with **Generate DORA Metrics** in the gear menu of the **DevOps Pipeline**, as in [Lab 3.6](3-6-release-to-production-and-read-dora-metrics.md), and
 read **Time to production** in the pipeline flow, the row of `main`, then the one of
 `integration`. Export the report again, **Export** then **Markdown report**, and compare it with the baseline you took in [Lab 3.6](3-6-release-to-production-and-read-dora-metrics.md).
 

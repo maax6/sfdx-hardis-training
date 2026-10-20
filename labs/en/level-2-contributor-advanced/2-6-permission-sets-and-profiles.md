@@ -22,7 +22,7 @@ depends_on:
 
 **Level**: 2 Contributor advanced
 
-**Time**: ~20 min<!-- observed --> (observed: median 20 min, 6 learners, fastest 10 min)<!-- /observed -->
+**Time**: ~30 min<!-- observed --> (observed: median 34 min, 7 learners, fastest 10 min)<!-- /observed -->
 
 **You will**: chase a permission that vanishes between a green deployment and the target org, and
 find out it was removed on purpose.
@@ -161,7 +161,7 @@ permission set, whatever their Profile.
 
 ### 6. Look at the other protection while you are here
 
-Open the **DevOps Pipeline** panel, then **Pipeline Settings** in the gear menu. Leave the scope
+Open the **DevOps Pipeline** panel, then **Configure Pipeline Settings** in the gear menu. Leave the scope
 selector **(1)** on **Global Settings**: these are project rules, identical for every branch.
 
 ![The Global Pipeline Settings panel, on its Deployment tab](../../_assets/annotated/vscode/pipeline-config.png)

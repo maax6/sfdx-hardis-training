@@ -1,13 +1,14 @@
 ---
 id: lab-3-1
 title: "Lab 3.1 - Configure the CI/CD pipeline up to production"
-description: "Extend a two-stage Salesforce pipeline to production: branches, protections, and preprod and production authenticated with JWT by Add/Configure Org."
+description: "Extend a two-stage Salesforce pipeline to production: branches, protections, and each org authenticated with JWT by Add or Reconnect a Major Org."
 level: 3
 lab: 1
 lang: en
 source_rev: ""
 screenshots:
   - annotated/vscode/devops-pipeline--one-column
+  - annotated/vscode/devops-pipeline-level3-split
   - annotated/web/github-new-branch
   - annotated/web/github-branch-rules
   - annotated/web/github-branch-rule
@@ -25,19 +26,22 @@ screenshots:
   - annotated/vscode/pipeline-cards--save-publish
   - annotated/vscode/work-save-completed
   - annotated/vscode/devops-pipeline-level3--four-stages
+  - annotated/vscode/scratch-org-pool
+  - annotated/vscode/org-initialization
+  - annotated/vscode/replacement-rules
 depends_on:
   commands: [hardis:project:configure:auth, hardis:work:new]
   flags: []
-  config: [availableTargetBranches, availableTargetBranchesLabels, productionBranch, mergeTargets, targetUsername, instanceUrl, orgAuthenticationMode, enablePromotionBranches, allowedPromotionSteps]
-  panels: [pipeline, pipelineConfig, orgManager, commandExecution, promptInput]
-  docs: [salesforce-devops-setup-home, salesforce-devops-setup-auth, salesforce-devops-setup-auth-github, salesforce-devops-setup-existing-org]
+  config: [availableTargetBranches, availableTargetBranchesLabels, productionBranch, mergeTargets, targetUsername, instanceUrl, orgAuthenticationMode, enablePromotionBranches, allowedPromotionSteps, poolConfig, orgInitSteps, replacementRules]
+  panels: [pipeline, pipelineConfig, orgManager, commandExecution, promptInput, scratchOrgPool, orgInit, replacementRules]
+  docs: [salesforce-devops-setup-home, salesforce-devops-setup-auth, salesforce-devops-setup-auth-github, salesforce-devops-setup-existing-org, salesforce-devops-setup-scratch-org-pool, salesforce-devops-org-initialization, salesforce-devops-config-replacement-rules]
 ---
 
 # Lab 3.1 - Configure the CI/CD pipeline up to production
 
 **Level**: 3 Release Manager
 
-**Time**: ~1 h 05<!-- observed --> (observed: median 1 h 07, 6 learners, fastest 17 min)<!-- /observed -->
+**Time**: ~2 h 45<!-- observed --> (observed: median 2 h 45, 6 learners, fastest 2 h)<!-- /observed -->
 
 **You will**: turn a two-stage pipeline into a four-stage one that reaches production, give the two
 new stages their org and a credential a real project can live with, and publish all of it the way
@@ -139,6 +143,15 @@ at the top right. Type `preprod` as the name **(1)**, leave the source on your f
 Then tell VS Code: in the **Source Control** panel, **...** menu, **Pull, Push** > **Fetch**. The
 next steps list the branches of your fork, and a branch VS Code has not fetched is not in the list.
 
+!!! warning "A course update merged with a squash comes back here"
+    `preprod` takes `main` as your fork has it. If you clicked **Sync fork** on GitHub, that `main`
+    holds course changes newer than the ones your `integration` started from. That is fine as long
+    as each course update reached `integration` through **Update my course**, which merges it with a
+    merge commit. If you ever opened a course update Pull Request yourself and merged it with
+    **Squash and merge**, the first Pull Request from `uat` into `preprod`, in [Lab 3.6 step 2](3-6-release-to-production-and-read-dora-metrics.md#2-rehearse-in-preprod), will
+    stop on a conflict in `config/.sfdx-hardis.yml`. Lab 3.6 explains the way out under **If it goes
+    wrong**.
+
 ### 3. Protect preprod and main
 
 From now on, **nobody pushes to a major branch**: not a contributor, not you. Every change reaches
@@ -236,21 +249,21 @@ In the **DevOps Pipeline** panel, under **Project Contribution Workflow** **(1)*
 The command creates `features/US-050-pipeline-up-to-production` from `integration` and checks it
 out. Everything the next steps write lands there.
 
-### 5. Configure preprod and its org: Add/Configure Org
+### 5. Configure preprod and its org: Add or Reconnect a Major Org
 
 Now the orgs. One command does it all for a branch: it writes the branch configuration, the org it
 deploys to and the branch it merges into, creates the credential the CI logs in with, and deploys the
 External Client App into the org. You run it once per branch, starting with `preprod`.
 
 In the **DevOps Pipeline** panel, click the gear **(1)** at the top right and choose
-**Add/Configure Org** **(2)**.
+**Add or Reconnect a Major Org** **(2)**.
 
-![The gear menu of the DevOps Pipeline panel, open on Add/Configure Org](../../_assets/annotated/vscode/pipeline-settings-menu--add-org.png)
+![The gear menu of the DevOps Pipeline panel, open on Add or Reconnect a Major Org](../../_assets/annotated/vscode/pipeline-settings-menu--add-org.png)
 
 The command runs in a panel and asks one question at a time **(1)**, with the answers to click below
 it **(2)**. Here it is at the second question, with `helios-preprod` already chosen.
 
-![The Add/Configure Org command asking which git branch to configure](../../_assets/annotated/vscode/configure-auth-branch--branch-question.png)
+![The Add or Reconnect a Major Org command asking which git branch to configure](../../_assets/annotated/vscode/configure-auth-branch--branch-question.png)
 
 It asks a dozen questions, in this order:
 
@@ -289,7 +302,7 @@ Just above question 9 the panel prints the two values the CI needs **(2)**, each
 Nothing prints them again, so do not close the panel. The panel keeps every question you answered
 **(1)**, and the files it wrote are in the reports bar at the bottom **(3)**.
 
-![The Add/Configure Org command printing the two secrets and waiting for them to be stored](../../_assets/annotated/vscode/configure-auth-variables--secrets.png)
+![The Add or Reconnect a Major Org command printing the two secrets and waiting for them to be stored](../../_assets/annotated/vscode/configure-auth-variables--secrets.png)
 
 In your fork (`github.com/my-username/sfdx-hardis-training`), open **Settings > Secrets and
 variables > Actions (1)**, then click **New repository secret (2)**:
@@ -362,7 +375,7 @@ consumer`, an accurate message that reads like a bug.
 
 ### 8. The same for main
 
-Same gear, **Add/Configure Org**, once more, for production:
+Same gear, **Add or Reconnect a Major Org**, once more, for production:
 
 | Branch | Org           | Base URL answer                                                            | Merges into  | Secrets                                       |
 |--------|---------------|----------------------------------------------------------------------------|--------------|-----------------------------------------------|
@@ -377,23 +390,35 @@ available in this lab. And store both secrets, the ID and the key, as in step 6.
 
 Four secrets, two External Client Apps, two keys. Tedious once, then never again.
 
+Look at the **DevOps Pipeline** panel now. It draws two separate pieces, `integration` → `uat`
+and `preprod` → `main`, with nothing between `uat` and `preprod`. That gap is expected, and the
+next paragraph closes it.
+
+![The DevOps Pipeline in the middle of step 8: integration to uat, and preprod to main, with no arrow between uat and preprod](../../_assets/annotated/vscode/devops-pipeline-level3-split.png)
+
 **Then tell `uat` where its work goes next.** The command wrote that `preprod` merges into
 `main`. Nothing has said yet that `uat` merges into `preprod`: until now `uat` was the end of the
-pipeline, and its branch file says so. In the **DevOps Pipeline** panel, gear menu, **Pipeline
-Settings**, switch the scope selector at the top right to **Branch: uat** **(1)**, open the
-**Deployment** tab **(2)** and click **Edit**. In **Merge target branches** **(3)**, type
-`preprod`, then **Save** **(4)**, which took the place of **Edit**.
+pipeline, and its branch file says so.
+
+1. In the **DevOps Pipeline** panel, gear menu, click **Configure Pipeline Settings**
+2. Switch the scope selector at the top right to **Branch: uat** **(1)**
+3. Open the **Deployment** tab **(2)** and click **Edit**
+4. In **Merge target branches** **(3)**, type `preprod`
+5. Click **Save** **(4)**, which took the place of **Edit**
 
 ![The Deployment tab of the uat branch settings, unlocked, with preprod as its merge target](../../_assets/annotated/vscode/pipeline-config-branch-merge-target.png)
 
 Without it the diagram draws no arrow from `uat` to `preprod`, and [Lab 3.6](3-6-release-to-production-and-read-dora-metrics.md) has no **+ PR**
 chip to click there. Step 11 publishes it with the rest.
 
+The diagram now draws one line of four branches, `integration` → `uat` → `preprod` → `main`, as
+in the picture of [step 12](#12-look-at-the-diagram-again).
+
 ### 9. Let contributors start a hotfix
 
 Contributors choose where a User Story goes from a list, and `preprod` is not in it yet.
 
-Open the **DevOps Pipeline** panel, the gear menu, **Pipeline Settings**. The page title reads
+Open the **DevOps Pipeline** panel, the gear menu, **Configure Pipeline Settings**. The page title reads
 **Global Pipeline Settings**, and the scope selector **(1)** reads **Global Settings**.
 
 ![The Global Pipeline Settings screen, with the scope selector, the Edit button and the User Stories tab](../../_assets/annotated/vscode/pipeline-config--target-branches.png)
@@ -442,9 +467,12 @@ Still in **Pipeline Settings**, scope **Global Settings**, open the **Danger Zon
 The tab opens on a warning, *Use these settings with caution, be sure to understand their impact as
 they drift from DevOps best practices*, and it is there for every setting on it, this one included.
 
-Click **Edit**, turn **Enable promotion branches (Beta)** **(1)** on, then add one row to **Allowed
-promotion steps (Beta)** **(2)** with **Source branch** `uat` and **Target branch** `preprod`.
-**Save**.
+1. Click **Edit**
+2. Turn **Enable promotion branches (Beta)** **(1)** on
+3. Add one row to **Allowed promotion steps (Beta)** **(2)**:
+   - **Source branch**: `uat`
+   - **Target branch**: `preprod`
+4. Click **Save**
 
 The second setting is required by the first, and it is a real decision rather than paperwork: it
 says a release manager on this project may assemble a subset on the way into `preprod`, the stage in
@@ -588,7 +616,7 @@ folder.
 `sf hardis:project:create` would have generated the skeleton of a new project: the workflows for
 every git provider, `.mega-linter.yml`, `projectName`, `developmentBranch` and `autoCleanTypes`. It
 writes no `config/branches/` file and asks for no org but the Dev Hub: the branch files are
-Add/Configure Org's job, as above. The command that takes an existing org with no repository at all
+Add or Reconnect a Major Org's job, as above. The command that takes an existing org with no repository at all
 and produces the first commit is `sf hardis:org:retrieve:sources:dx`, the real starting point of
 most projects.
 
@@ -614,6 +642,37 @@ That diagram is now the truth about this project, and the thing you point at whe
 "so where is it". The **+ PR** buttons on the arrows are the promotion Pull Requests, and [Lab 3.5](3-5-promote-to-uat-and-write-release-notes.md) is
 the first time you click one.
 
+## Three settings this course does not use
+
+Helios is a small project, so three settings stay off for the whole course. You will meet them on a
+real one. Each is set once, usually by the release manager or a tech lead, and its documentation page
+explains how. Nothing to do here: look at the pictures and know they exist.
+
+**Scratch org pool.** Creating a scratch org and loading the project into it can take twenty
+minutes. A pool keeps a few of them ready: a scheduled job creates and initializes them every night,
+and **New User Story** takes one in seconds. Helios creates its scratch orgs once, in **Set up my
+training environment**, so it has no pool. The panel is **Scratch Org Pool**, in the **Setup
+Configuration** commands. See
+[Set up a scratch org pool](https://sfdx-hardis.cloudity.com/salesforce-devops-setup-scratch-org-pool/).
+
+![The Scratch Org Pool panel, with four scratch orgs ready out of five](../../_assets/annotated/vscode/scratch-org-pool.png)
+
+**Org initialization (Beta).** It lists what every new scratch org or sandbox receives, in order:
+packages, project sources, permission sets, data, Apex scripts. The pool runs the same steps when it
+fills up. Gear menu of the DevOps Pipeline, **Configure Org Initialization**. See
+[Initialize scratch orgs and sandboxes](https://sfdx-hardis.cloudity.com/salesforce-devops-org-initialization/).
+
+![The Org Initialization panel, with the steps a new Helios scratch org would get](../../_assets/annotated/vscode/org-initialization.png)
+
+**Replacement rules (Beta).** Some metadata must differ from one org to the next: an endpoint URL, a
+password read from a CI secret, a permission production must not grant. A replacement rule changes
+the files just before each deployment, for the org it deploys to, and the repository keeps one
+version. Helios has a case: each org books its panel batches with its own warehouse system, and the
+`Helios_Warehouse` remote site holds one URL. Gear menu of the DevOps Pipeline, **Configure Replacement Rules**. See
+[Replacement rules](https://sfdx-hardis.cloudity.com/salesforce-devops-config-replacement-rules/).
+
+![The Replacement Rules panel, with the warehouse URL of each Helios org](../../_assets/annotated/vscode/replacement-rules.png)
+
 ## What you should see
 
 - Four branch protection rules in **Settings** > **Branches** of your fork, `integration`, `uat`,
@@ -629,7 +688,7 @@ the first time you click one.
 
 ## If it goes wrong
 
-**preprod is not in the branch list of Add/Configure Org.**
+**preprod is not in the branch list of Add or Reconnect a Major Org.**
 VS Code has not fetched it. **Source Control** panel, **...** menu, **Pull, Push** > **Fetch**, then
 run the command again.
 
@@ -638,7 +697,7 @@ It happens when a scratch org expired and **Set up my training environment** bui
 the same alias: the command lists the orgs from a cache, and the cache still holds the old one.
 Picking it makes the command stop straight after "Selected Org", with none of the questions asked.
 The last answer of the list is the way out: **😱 I already authenticated my org but I don't see it !**
-clears that cache. Then run **Add/Configure Org** again and the list is right.
+clears that cache. Then run **Add or Reconnect a Major Org** again and the list is right.
 
 **The preprod column appears with no org.**
 The branch file was written for another branch name. Check `config/branches/` for a typo: the file
@@ -657,17 +716,17 @@ that failed.
 
 **`client identifier invalid`.**
 The External Client App behind that consumer key was never created: the command stopped after it
-printed the two values. Run **Add/Configure Org** again for that branch, store the two new values,
+printed the two values. Run **Add or Reconnect a Major Org** again for that branch, store the two new values,
 and publish again.
 
-**Add/Configure Org stops asking whether you deleted the External Client App.**
+**Add or Reconnect a Major Org stops asking whether you deleted the External Client App.**
 You are running it a second time for that branch, and the app it deploys is already in the org, so
 it asks you to remove the old one first: *External Client App named `sfdxhardis<branch>` already
 exists ... Have you deleted it?* In the org, **Setup > External Client App Manager**, delete that
 app, then answer yes. It is the normal path whenever an entry above sends you back through
-**Add/Configure Org**.
+**Add or Reconnect a Major Org**.
 
-**Add/Configure Org stops straight after "Selected Org", with none of the questions asked.**
+**Add or Reconnect a Major Org stops straight after "Selected Org", with none of the questions asked.**
 The org list offered a `helios-` org that no longer exists, usually because a scratch org was
 rebuilt under the same alias. See the entry above: the last answer of the list,
 **I already authenticated my org but I don't see it !**, clears that cache.
@@ -729,5 +788,8 @@ Welcome page > **Training: Level 3** > **Check my work**, then pick **Lab 3.1**.
 - [Configure CI authentication](https://sfdx-hardis.cloudity.com/salesforce-devops-setup-auth/)
 - [GitHub Actions authentication](https://sfdx-hardis.cloudity.com/salesforce-devops-setup-auth-github/)
 - [Retrieve an existing org](https://sfdx-hardis.cloudity.com/salesforce-devops-setup-existing-org/)
+- [Set up a scratch org pool](https://sfdx-hardis.cloudity.com/salesforce-devops-setup-scratch-org-pool/)
+- [Initialize scratch orgs and sandboxes (Beta)](https://sfdx-hardis.cloudity.com/salesforce-devops-org-initialization/)
+- [Replacement rules (Beta)](https://sfdx-hardis.cloudity.com/salesforce-devops-config-replacement-rules/)
 
 [Next: Lab 3.2 - Review and merge a contributor Pull Request](3-2-review-a-contributor-pull-request.md){ .md-button .md-button--primary }
