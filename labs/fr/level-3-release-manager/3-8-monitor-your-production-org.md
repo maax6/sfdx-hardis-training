@@ -5,7 +5,7 @@ description: "Mettez en place le monitoring nocturne sfdx-hardis sur votre org S
 level: 3
 lab: 8
 lang: fr
-source_rev: "7843945b7eab00dc4fd146cc0527c117094b4391"
+source_rev: "19e896896f5b4c045e9763f894e759350bf9a845"
 screenshots:
   - annotated/vscode/org-monitoring--not-a-monitoring-repo
   - annotated/vscode/monitoring-config--what-it-watches
@@ -23,7 +23,7 @@ depends_on:
 
 **Niveau** : 3 Release Manager
 
-**Durée** : ~30 min<!-- observed --> (Labs 3.8 à 3.10 observés ensemble : médiane 1 h 46, 3 participants, le plus rapide 51 min)<!-- /observed -->
+**Durée** : ~10 min<!-- observed --> (observé : médiane 13 min, 6 participants, le plus rapide 6 min)<!-- /observed -->
 
 **Vous allez** : mettre en place un monitoring nocturne sur la production, lire son premier rapport,
 et décider de ce qui mérite qu'on vous en parle.
@@ -151,6 +151,13 @@ Pour finir, elle écrit le workflow sur `main` et le dit : *The monitoring workf
 monitoring_...*. GitHub ne planifie que les workflows de la branche par défaut, et ne propose
 **Run workflow** que pour ceux-là : le workflow qui lance chaque org monitorée vit donc sur `main` et
 liste chaque branche de monitoring.
+
+Si GitHub refuse un push en route, la commande affiche *GitHub refused this push* et cite le scope
+`workflow` : la première entrée de **En cas de problème** plus bas est la sortie. Ne passez pas
+outre en mergeant la branche de monitoring dans `main`, même par une Pull Request. `main` ne porte
+que le workflow, chaque org monitorée vit sur sa propre branche, et un tel merge amène sur `main` le
+workflow d'exemple de la branche, dont les jobs échouent sur des branches appelées
+`monitoring_myclient`.
 
 Elle ne demande jamais de nom de repository à créer ni de fournisseur git, parce qu'elle n'en crée aucun : la seule adresse qu'elle demande, celle de votre fork, elle se contente de l'enregistrer.
 L'authentification est le même code qu'au [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md)
@@ -338,7 +345,7 @@ produit.
 
 Le prochain release manager aura besoin du repository de monitoring dès son premier jour, et le seul
 endroit où il regardera est le projet. De retour dans le repository de sources : **DevOps
-Pipeline** > menu engrenage > **Pipeline Settings**, portée **Global Settings**, onglet **Salesforce
+Pipeline** > menu engrenage > **Configure Pipeline Settings**, portée **Global Settings**, onglet **Salesforce
 Project**.
 **Monitoring repository** : **Edit**, collez l'adresse de votre repository de monitoring,
 `https://github.com/<votre-pseudo>/sfdx-hardis-training-monitoring`, et **Save**. Puis
@@ -434,9 +441,11 @@ fichier qu'avec des identifiants qui ont la permission `workflow`. Ceux que VS C
 l'ont pas. Cliquez sur l'icône **Accounts** en bas de la barre d'activité, déconnectez-vous de
 GitHub, puis cliquez de nouveau sur **Install Org Monitoring** : VS Code vous demande de vous
 connecter, et les permissions qu'il demande incluent les workflows. La commande peut être relancée
-sans risque. Ne poussez pas la branche par un autre moyen pour continuer : la commande écrit aussi
-le workflow sur `main` à la fin, et sans cette étape le workflow garde ses noms de branches
-d'exemple et ne traite jamais votre org.
+sans risque. Chaque lancement crée toutefois un nouveau certificat : enregistrez les deux secrets
+qu'elle donne cette fois, à la place de ceux du premier lancement, sinon le job échoue à
+l'authentification. Ne poussez pas la branche par un autre moyen pour continuer, et ne la mergez pas
+dans `main` : la commande écrit aussi le workflow sur `main` à la fin, et sans cette étape le
+workflow garde ses noms de branches d'exemple et ne traite jamais votre org.
 
 **Le workflow échoue sur une branche appelée `monitoring_myclient`.**
 Le workflow sur `main` liste encore les branches d'exemple : la commande n'a pas atteint sa
@@ -447,7 +456,8 @@ branche et ses deux secrets.
 **Le workflow de monitoring échoue à l'authentification.**
 Comme au [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md) : l'External Client App a besoin
 que l'utilisateur soit pré-autorisé, et les secrets doivent être dans le repository de
-**monitoring**, pas dans celui des sources.
+**monitoring**, pas dans celui des sources. Après un second lancement de la commande, ce doivent
+aussi être les deux qu'elle a donnés la dernière fois : chaque lancement remplace le certificat.
 
 **Actions ne propose pas de Run workflow pour Org Monitoring sfdx-hardis.**
 Le workflow n'est pas sur `main`. La commande l'y écrit à la fin, sur GitHub, et le dit. Si elle a

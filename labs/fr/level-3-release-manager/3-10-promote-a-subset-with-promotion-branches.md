@@ -5,7 +5,7 @@ description: "Transportez trois User Stories approuvées sur cinq de uat vers pr
 level: 3
 lab: 10
 lang: fr
-source_rev: "ae7e8b85fddcd4b8558b02a9b1e0db3bf73f7658"
+source_rev: "1bada17c8a3499f176b81820d30fee20621aa437"
 screenshots:
   - annotated/vscode/welcome-custom-menu-3
   - annotated/vscode/pipeline-config-danger--promotion-branches
@@ -29,7 +29,7 @@ depends_on:
 
 **Niveau** : 3 Release Manager
 
-**Durée** : ~50 min<!-- observed --> (Labs 3.8 à 3.10 observés ensemble : médiane 1 h 46, 3 participants, le plus rapide 51 min)<!-- /observed -->
+**Durée** : ~1 h 05<!-- observed --> (observé : médiane 1 h 07, 6 participants, le plus rapide 39 min)<!-- /observed -->
 
 **Vous allez** : livrer en preprod trois User Stories approuvées pendant que deux autres restent en
 UAT, résoudre le conflit que l'une d'elles traîne avec elle, et remettre la pipeline d'aplomb
@@ -96,7 +96,7 @@ telle qu'elle est, US-058 et US-060 comprises.
 Les deux réglages dont ce lab a besoin ont été publiés au [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md) et remontent la pipeline avec
 chaque promotion depuis. Regardez-les avant de compter dessus.
 
-Ouvrez le panneau **DevOps Pipeline**, le menu engrenage, **Pipeline Settings**, portée **Global
+Ouvrez le panneau **DevOps Pipeline**, le menu engrenage, **Configure Pipeline Settings**, portée **Global
 Settings**, puis l'onglet **Danger Zone**.
 
 ![La Danger Zone des Global Pipeline Settings, avec les deux réglages des promotion branches](../../_assets/annotated/vscode/pipeline-config-danger--promotion-branches.png)
@@ -166,7 +166,8 @@ Relisez chacune avec les quatre questions du [Lab 3.2](3-2-review-a-contributor-
 toute Pull Request de fonctionnalité de ce cours. Vous n'avez pas à attendre chaque déploiement
 avant de merger la suivante : ils se mettent en file sur `integration`. Quand le dernier est vert,
 promouvez `integration` vers `uat` comme au [Lab 3.5](3-5-promote-to-uat-and-write-release-notes.md) : la pastille **+ PR** sur la flèche, un titre
-lisible par un humain, **Merge pull request** et jamais de squash.
+lisible par un humain, un merge commit (**Create a merge commit**, sous la flèche du bouton vert) et
+jamais de squash.
 
 Les cinq stories sont maintenant dans `uat`, déployées dans `helios-uat`, et c'est le moment que
 toute vraie semaine finit par atteindre : tout est testable, et une partie seulement est approuvée.
@@ -577,7 +578,8 @@ utilisable par la personne qui lira ça dans six mois :
 > until the wording is approved, expected Wednesday next week, and US-060 until the crews have
 > been briefed.
 
-Mergez ensuite avec **Merge pull request**. Jamais de squash : les commits cherry-pickés et leurs
+Mergez ensuite avec un merge commit : **Create a merge commit**, sous la flèche du bouton vert.
+Jamais de squash : les commits cherry-pickés et leurs
 lignes de traçabilité sont ce que la prochaine promotion, le retrofit et les notes de version lisent
 tous. La ligne **How to merge** du commentaire vert du contrôle le dit aussi.
 
@@ -652,8 +654,8 @@ bouton bleu en dessous affiche **Continue** tant qu'un merge est en cours, comme
 [Lab 2.7](../level-2-contributor-advanced/2-7-resolve-a-git-merge-conflict.md). Cliquez dessus, puis **Save / Publish User Story** comme au [Lab 3.7](3-7-hotfix-and-retrofit.md)
 étape 9, et ouvrez la Pull Request vers `integration`, intitulée `Retrofit: the promotion of US-057,
 US-059 and US-061 back down into integration`. Son onglet **Files changed** est vide, et c'est
-normal : lisez le bloc ci-dessous. Attendez son contrôle, et mergez-la avec **Merge pull request**,
-comme le demande la ligne **How to merge** de son commentaire.
+normal : lisez le bloc ci-dessous. Attendez son contrôle, et mergez-la avec un merge commit (**Create a
+merge commit**), comme le demande la ligne **How to merge** de son commentaire.
 
 <details markdown="1"><summary>Sous le capot : une Pull Request qui ne change aucun fichier, et pourquoi elle compte quand même</summary>
 
