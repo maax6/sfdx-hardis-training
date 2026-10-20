@@ -3,8 +3,33 @@
 What changed in the course, for learners and trainers. The course has no versions: each section is
 a day, newest first, and a change goes under the date of the day it is made.
 
+## 2026-10-20
+
+- Labs 3.5, 3.6, 3.7 and 3.10 name the GitHub option to pick for a promotion: Create a merge commit, under the arrow of the green button.
+- Lab 3.1 shows the DevOps Pipeline in the middle of step 8, and its two settings steps are numbered lists.
+- Lab 3.3 says why a failed action has no Retry button, and why re-running the job on GitHub is not the same thing.
+- Simulate my teammates ends with a button that opens the Pull Request it created.
+- Lab 3.7 opens production from Orgs Manager, warns about hotfixes from integration at the top of step 2, and says what to do with a retrofit that brought nothing down.
+
+## 2026-10-19
+
+- Trainers: the lab drivers point to the training scenario of the `e2e` skill of sfdx-hardis, which replaces the `training-e2e` skill.
+- Links to another site (GitHub, Salesforce, the sfdx-hardis documentation) open in a new tab, so the lab stays open.
+- Lab 2.3 says to copy only its four Apex files, and explains the check that fails on the Lab 2.4 batch when it is copied too.
+- Lab 3.8 says what to do when GitHub refuses a push during the configuration: never merge the monitoring branch into `main`, and store the two new secrets of each run.
+
+- Lab 3.1 shows what the scratch org pool, org initialization and replacement rules are for, with a picture of each and its documentation page, without asking you to set them up.
+
+## 2026-10-18
+
+- Labs 3.1 and 3.6 follow the new gear menu of the DevOps Pipeline: Configure Pipeline Settings, Add or Reconnect a Major Org, Configure Org Initialization, Configure Replacement Rules and Generate DORA Metrics, with their screenshots taken again.
+- Set up my training environment says what it waits for while it turns Dev Hub on, and stops with a clear message when the org does not answer.
+
 ## 2026-10-17
 
+- Lab 3.4 says plainly that US-018 and US-019 are already merged when it starts, and reviews their merge order instead of promising a live collision.
+- Lab 3.6 explains the conflict in `config/.sfdx-hardis.yml` on the first Pull Request into `preprod` when a course update was squashed, and Lab 3.1 warns about it.
+- Update my course reminds you to merge its Pull Request with a merge commit whenever it hands it over to you.
 - Contributors: Claude Code loads the MegaLinter skills and agents from the MegaLinter plugin, enabled in `.claude/settings.json`.
 
 ## 2026-10-16

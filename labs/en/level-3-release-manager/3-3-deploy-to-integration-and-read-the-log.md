@@ -28,7 +28,7 @@ depends_on:
 
 **Level**: 3 Release Manager
 
-**Time**: ~1 h 30<!-- observed --> (observed: median 1 h 30, 5 learners, fastest 51 min)<!-- /observed -->
+**Time**: ~1 h 25<!-- observed --> (observed: median 1 h 26, 6 learners, fastest 30 min)<!-- /observed -->
 
 **You will**: read a deployment log properly, review a Pull Request whose check fails on a field
 that is right there in its diff and find the file that hides it, then recover post-deployment
@@ -102,7 +102,7 @@ org has to genuinely be at the commit the pipeline thinks it is at.
 !!! note "This project has delta off, on purpose"
     `useDeltaDeployment` is absent from `config/.sfdx-hardis.yml`, so every deployment in this
     course sends the full package. Read it for yourself: **DevOps Pipeline**, gear menu,
-    **Pipeline Settings**, scope **Global Settings** **(1)**, **Deployment** tab **(2)**.
+    **Configure Pipeline Settings**, scope **Global Settings** **(1)**, **Deployment** tab **(2)**.
     **Use Delta Deployment** **(3)** shows **Disabled**.
 
     The Helios app is about sixty components by now, so a full deployment costs a minute and delta would save
@@ -324,6 +324,11 @@ The first action is right: the org is missing its group. Create it in `helios-in
 The action definition is read from the branch you have checked out, which is why step 10 had you
 check out `integration` and pull it. If you switched branch since, come back to it.
 
+!!! warning "No Retry on the row, only Mark as done?"
+    VS Code is not on `integration`, so the action definition is not in your checkout.
+    Check it out, pull it, and click **Refresh**. Do not re-run the job on GitHub instead: it
+    deploys everything again, without the Quick Deploy, and runs the actions from the start.
+
 Back in the **Deployment Actions** tab, click **Retry** on the row of **Put the delivery managers in
 the Crew Leads group**. The command runs in VS Code, against `helios-integration`:
 
@@ -491,6 +496,11 @@ The status comes from sfdx-hardis, which needs a recent version and your GitHub 
 it from the **Dependencies** panel, and check the git provider icon of the DevOps Pipeline is
 connected. A row offers Retry only when its action failed or was stopped, after the deployment.
 
+**The failed row has no Retry, only Mark as done.**
+Your checked out branch is not `integration`. Check it out, pull it, click **Refresh**. Re-running
+the deployment job on GitHub is not the same thing: it deploys everything again, without the Quick
+Deploy, and the first action fails until the group exists.
+
 **Retry says no org of helios-integration is connected.**
 Connect `helios-integration` in **Orgs Manager**, then click **Retry** again.
 
@@ -515,4 +525,4 @@ Welcome page > **Training: Level 3** > **Check my work**, then pick **Lab 3.3**.
 - [Smart Deploy internals](https://sfdx-hardis.cloudity.com/salesforce-devops-smart-deployment/)
 - [Recover a failed deployment action](https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions/#recover-a-failed-action)
 
-[Next: Lab 3.4 - Three Pull Requests collide: choose the merge order](3-4-merge-colliding-pull-requests.md){ .md-button .md-button--primary }
+[Next: Lab 3.4 - Three Pull Requests in one release: review the merge order](3-4-merge-colliding-pull-requests.md){ .md-button .md-button--primary }
